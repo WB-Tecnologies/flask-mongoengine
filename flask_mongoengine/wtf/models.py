@@ -46,20 +46,19 @@ class ModelForm(Form):
 
     def save(self, commit=True):
         if self.instance:
-            update = {}
             for name, field in self._fields.iteritems():
                 if name == 'csrf_token':
                     continue
                 try:
                     if getattr(self.instance, name) != field.data:
-                        update['set__' + name] = field.data
+                        self.instance[name] = field.data
                 except AttributeError:
                     raise Exception('Model %s has not attr %s but form %s has' \
                                     % (type(self.instance),
                                       name,
                                       type(self)))
-            update['commit'] = commit
-            self.instance.update(**update)
+            self.instance['commit'] = commit
+            self.instance.save()
         else:
             self.instance = self.model_class(**self.data)
             if commit:
