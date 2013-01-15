@@ -48,6 +48,8 @@ class ModelForm(Form):
         if self.instance:
             update = {}
             for name, field in self._fields.iteritems():
+                if name == 'csrf_token':
+                    continue
                 try:
                     if getattr(self.instance, name) != field.data:
                         update['set__' + name] = field.data
