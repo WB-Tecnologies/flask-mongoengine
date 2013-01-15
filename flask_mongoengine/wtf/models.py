@@ -57,8 +57,8 @@ class ModelForm(Form):
                                     % (type(self.instance),
                                       name,
                                       type(self)))
-            self.instance['commit'] = commit
-            self.instance.save()
+            if commit:
+                self.instance.save()
         else:
             self.instance = self.model_class(**self.data)
             if commit:
